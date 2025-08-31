@@ -1,4 +1,6 @@
 import { Table, Column, Model, DataType, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript';
+import { ValidRoles } from '../interfaces';
+import { object } from 'joi';
 
 @Table({
   tableName: 'users',
@@ -13,7 +15,7 @@ export class Auth extends Model {
   id: string;
 
   @Column({
-    type: DataType.STRING(255), // Especificar longitud explícita
+    type: DataType.TEXT, // Especificar longitud explícita
     allowNull: false,
     unique: {
       name: 'email_unique',
@@ -27,7 +29,7 @@ export class Auth extends Model {
   email: string;
 
   @Column({
-    type: DataType.STRING(255), // Especificar longitud explícita
+    type: DataType.STRING(600), // Especificar longitud explícita
     allowNull: false,
     validate: {
       len: [6, 255] // Validación de longitud
@@ -45,10 +47,25 @@ export class Auth extends Model {
   name: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
     allowNull: true,
   })
   refreshToken: string;
+
+
+  @Column({
+    type: DataType.ARRAY(DataType.STRING),
+    defaultValue: [ValidRoles.admin],
+    allowNull: true,
+    validate: {
+      isValidRoles(value: string[]) {
+        if (value && value.some(role => !Object.values(ValidRoles).includes(role as ValidRoles))) {
+          throw new Error('Invalid role provided');
+        }
+      }
+    }
+  })
+  roles?: ValidRoles[];
 
   @Column({
     type: DataType.BOOLEAN,

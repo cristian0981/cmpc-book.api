@@ -13,6 +13,8 @@ interface EnvVars {
   CORS_ORIGIN: string;
   MAX_FILE_SIZE: number;
   UPLOAD_PATH: string;
+  HOST_API: string;
+  FILES_API: string;
 
 }
 
@@ -26,6 +28,8 @@ const envsSchema = joi.object({
   DB_PASSWORD: joi.string().required(),
   DB_NAME: joi.string().required(), 
   CORS_ORIGIN: joi.string().required(),
+  FILES_API: joi.string().required(),
+  HOST_API: joi.string().required(),
   MAX_FILE_SIZE: joi.number().required(),
   UPLOAD_PATH: joi.string().required(),
 })          
@@ -54,4 +58,6 @@ export const envs = {
   cors_origin: envVars.CORS_ORIGIN,
   max_file_size: envVars.MAX_FILE_SIZE,
   upload_path: envVars.UPLOAD_PATH,
+  host_api: envVars.HOST_API,
+  files_api: envVars.FILES_API,
 }

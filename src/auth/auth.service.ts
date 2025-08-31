@@ -31,6 +31,7 @@ export class AuthService implements IAuthService {
       email: userData.email,
       password: hashedPassword,
       name: userData.name,
+      roles: userData.roles,
     });
 
     return await this.generateTokens(user);
@@ -89,7 +90,7 @@ export class AuthService implements IAuthService {
   }
 
   private async generateTokens(user: Auth): Promise<AuthResponse> {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, roles: user.roles };
     
     const accessToken = this.jwtService.sign(payload, {
       secret: envs.jwt_secret,
@@ -111,6 +112,7 @@ export class AuthService implements IAuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        roles: user.roles,
       },
     };
   }

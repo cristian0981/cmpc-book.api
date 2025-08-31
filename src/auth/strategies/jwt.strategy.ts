@@ -6,6 +6,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ApiProperty } from '@nestjs/swagger';
 import { Auth } from '../models/auth.model';
 import { envs } from '../../settings/envs';
+import { ValidRoles } from '../interfaces';
 
 export class JwtPayload {
   @ApiProperty({
@@ -19,6 +20,12 @@ export class JwtPayload {
     example: 'usuario@ejemplo.com'
   })
   email: string;
+
+  @ApiProperty({
+    description: 'Roles del usuario',
+    example: 'user,admin'
+  })
+  roles: ValidRoles[];  
 
   @ApiProperty({
     description: 'Timestamp de emisión',
@@ -37,6 +44,7 @@ export interface JwtUser {
   id: string;
   email: string;
   name?: string;
+  roles?: ValidRoles[];
   isActive: boolean;
 }
 
@@ -72,7 +80,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           id: userId,
           isActive: true 
         },
-        attributes: ['id', 'email', 'name', 'isActive']
+        attributes: ['id', 'email', 'name', 'roles','isActive']
       });
 
       if (!user) {
@@ -83,9 +91,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         id: user.id,
         email: user.email,
         name: user.name,
+        roles: user.roles,
         isActive: user.isActive,
       };
     } catch (error) {
+      console.log(error);
+      
       if (error instanceof UnauthorizedException) {
         throw error;
       }

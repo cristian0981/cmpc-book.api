@@ -3,7 +3,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
-import { AllExceptionsFilter } from './common/exceptions-filter/sequelize.exception-filter';
+import { AllExceptionsFilter } from './common/exceptions-filter/all-exception.filter';
+import { envs } from './settings/envs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,8 +16,9 @@ async function bootstrap() {
   
   // Configurar CORS
   app.enableCors({
-    origin: true,
+    origin: ['http://localhost:5173'],
     credentials: true,
+
   });
   
   // Configurar validación global
@@ -56,8 +58,8 @@ async function bootstrap() {
     },
   });
   
-  await app.listen(3000);
-  console.log('🚀 Aplicación ejecutándose en: http://localhost:3000');
-  console.log('📚 Documentación Swagger disponible en: http://localhost:3000/api/docs');
+  await app.listen(envs.port);
+  console.log(`🚀 Aplicación ejecutándose en: http://localhost:${envs.port}`);
+  console.log(`📚 Documentación Swagger disponible en: http://localhost:${envs.port}/api/docs`);
 }
 bootstrap();

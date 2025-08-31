@@ -1,5 +1,6 @@
-import { IsEmail, IsString, MinLength, IsOptional } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsOptional, IsArray, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ValidRoles } from '../interfaces';
 
 export class CreateAuthDto {
   @ApiProperty({
@@ -27,4 +28,14 @@ export class CreateAuthDto {
   @IsOptional()
   @IsString({ message: 'El nombre debe ser una cadena de texto' })
   name?: string;
+  
+  @ApiProperty({
+    description: 'Rol del usuario',
+    example: ['admin', 'user'],
+    required: false
+  })
+  @IsOptional()
+  @IsArray({ message: 'El rol debe ser un array' })
+  @IsEnum(ValidRoles, { each: true, message: 'Rol inválido' })
+  roles?: ValidRoles[];
 }

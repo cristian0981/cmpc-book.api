@@ -3,6 +3,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { JwtStrategy, JwtPayload, JwtUser } from './jwt.strategy';
 import { Auth } from '../models/auth.model';
+import { ValidRoles } from '../interfaces/valid-roles.interface';
 
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
@@ -13,12 +14,14 @@ describe('JwtStrategy', () => {
     id: '123e4567-e89b-12d3-a456-426614174000',
     email: 'test@example.com',
     name: 'Usuario Test',
+    roles: [ValidRoles.user],
     isActive: true
   };
 
   const mockPayload: JwtPayload = {
     sub: '123e4567-e89b-12d3-a456-426614174000',
     email: 'test@example.com',
+    roles: [ValidRoles.user],
     iat: 1640995200,
     exp: 1640998800
   };
@@ -27,6 +30,7 @@ describe('JwtStrategy', () => {
     id: mockUser.id,
     email: mockUser.email,
     name: mockUser.name,
+    roles: mockUser.roles,
     isActive: mockUser.isActive
   };
 
@@ -79,7 +83,7 @@ describe('JwtStrategy', () => {
             id: mockPayload.sub,
             isActive: true
           },
-          attributes: ['id', 'email', 'name', 'isActive']
+          attributes: ['id', 'email', 'name', 'roles', 'isActive']
         });
         expect(authModel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toEqual(expectedJwtUser);
@@ -102,7 +106,8 @@ describe('JwtStrategy', () => {
         // Arrange
         const minimalPayload: JwtPayload = {
           sub: mockUser.id,
-          email: mockUser.email
+          email: mockUser.email,
+          roles: [ValidRoles.user]  
         };
         authModel.findOne.mockResolvedValue(mockUser as any);
 
@@ -115,7 +120,7 @@ describe('JwtStrategy', () => {
             id: minimalPayload.sub,
             isActive: true
           },
-          attributes: ['id', 'email', 'name', 'isActive']
+          attributes: ['id', 'email', 'name', 'roles', 'isActive']
         });
         expect(result).toEqual(expectedJwtUser);
       });
@@ -125,7 +130,8 @@ describe('JwtStrategy', () => {
       it('debería lanzar UnauthorizedException si no hay userId en el payload', async () => {
         // Arrange
         const invalidPayload = {
-          email: 'test@example.com'
+          email: 'test@example.com',
+          roles: [ValidRoles.user]  
         } as JwtPayload;
 
         // Act & Assert
@@ -140,7 +146,8 @@ describe('JwtStrategy', () => {
         // Arrange
         const invalidPayload = {
           sub: null,
-          email: 'test@example.com'
+          email: 'test@example.com',
+          roles: [ValidRoles.user]  
         } as any;
 
         // Act & Assert
@@ -155,7 +162,8 @@ describe('JwtStrategy', () => {
         // Arrange
         const invalidPayload = {
           sub: '',
-          email: 'test@example.com'
+          email: 'test@example.com',
+          roles: [ValidRoles.user]  
         } as JwtPayload;
 
         // Act & Assert
@@ -182,7 +190,7 @@ describe('JwtStrategy', () => {
             id: mockPayload.sub,
             isActive: true
           },
-          attributes: ['id', 'email', 'name', 'isActive']
+          attributes: ['id', 'email', 'name', 'roles', 'isActive']
         });
       });
 
@@ -201,7 +209,7 @@ describe('JwtStrategy', () => {
             id: mockPayload.sub,
             isActive: true
           },
-          attributes: ['id', 'email', 'name', 'isActive']
+          attributes: ['id', 'email', 'name', 'roles', 'isActive']
         });
       });
     });
@@ -222,7 +230,7 @@ describe('JwtStrategy', () => {
             id: mockPayload.sub,
             isActive: true
           },
-          attributes: ['id', 'email', 'name', 'isActive']
+          attributes: ['id', 'email', 'name', 'roles', 'isActive']
         });
       });
 
@@ -241,7 +249,7 @@ describe('JwtStrategy', () => {
             id: mockPayload.sub,
             isActive: true
           },
-          attributes: ['id', 'email', 'name', 'isActive']
+          attributes: ['id', 'email', 'name', 'roles', 'isActive']
         });
       });
 
@@ -279,6 +287,7 @@ describe('JwtStrategy', () => {
       const payload: JwtPayload = {
         sub: '123',
         email: 'test@example.com',
+        roles: [ValidRoles.admin],
         iat: 1640995200,
         exp: 1640998800
       };
@@ -286,6 +295,7 @@ describe('JwtStrategy', () => {
       // Assert
       expect(payload.sub).toBeDefined();
       expect(payload.email).toBeDefined();
+      expect(payload.roles).toBeDefined();
       expect(typeof payload.iat).toBe('number');
       expect(typeof payload.exp).toBe('number');
     });
@@ -296,12 +306,14 @@ describe('JwtStrategy', () => {
         id: '123',
         email: 'test@example.com',
         name: 'Test User',
+        roles: [ValidRoles.user],
         isActive: true
       };
 
       // Assert
       expect(user.id).toBeDefined();
       expect(user.email).toBeDefined();
+      expect(user.roles).toBeDefined();
       expect(typeof user.isActive).toBe('boolean');
     });
   });
@@ -311,7 +323,8 @@ describe('JwtStrategy', () => {
       // Arrange
       const numericPayload = {
         sub: '123456789',
-        email: 'test@example.com'
+        email: 'test@example.com',
+        roles: [ValidRoles.user]  
       } as JwtPayload;
       
       const userWithNumericId = {
@@ -331,7 +344,7 @@ describe('JwtStrategy', () => {
           id: '123456789',
           isActive: true
         },
-        attributes: ['id', 'email', 'name', 'isActive']
+        attributes: ['id', 'email', 'name', 'roles', 'isActive']
       });
     });
 
@@ -339,7 +352,8 @@ describe('JwtStrategy', () => {
       // Arrange
       const specialEmailPayload = {
         sub: mockUser.id,
-        email: 'test+special@example-domain.com'
+        email: 'test+special@example-domain.com',
+        roles: [ValidRoles.user]  
       } as JwtPayload;
       
       const userWithSpecialEmail = {
