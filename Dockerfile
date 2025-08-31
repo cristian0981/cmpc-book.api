@@ -24,10 +24,6 @@ COPY package*.json ./
 # Instala solo dependencias de producción
 RUN npm install --omit=dev --legacy-peer-deps
 
-# Copia el código compilado desde el builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/uploads ./uploads
-COPY --from=builder /app/static ./static
 
 # Crear directorios para uploads
 RUN mkdir -p uploads/ static/
