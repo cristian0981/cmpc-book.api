@@ -1,26 +1,37 @@
-# Usar Node.js 18 como imagen base
-FROM node:18-alpine
+# Etapa de build
+FROM node:18-alpine as builder
 
-# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar dependencias con --legacy-peer-deps para resolver conflictos
-RUN npm ci --legacy-peer-deps --omit=dev
+# Instala TODAS las dependencias (incluye devDependencies para compilar)
+RUN npm install --legacy-peer-deps
 
-# Copiar código fuente
 COPY . .
 
-# Construir la aplicación
+# Compila la aplicación
 RUN npm run build
 
-# Exponer puerto
-EXPOSE 5000
+
+# Etapa de producción
+FROM node:18-alpine as production
+
+WORKDIR /app
+
+COPY package*.json ./
+
+# Instala solo dependencias de producción
+RUN npm install --omit=dev --legacy-peer-deps
+
+# Copia el código compilado desde el builder
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/uploads ./uploads
+COPY --from=builder /app/static ./static
 
 # Crear directorios para uploads
-RUN mkdir -p uploads/books static/books
+RUN mkdir -p uploads/ static/
 
-# Comando para iniciar la aplicación
+EXPOSE 5000
+
 CMD ["npm", "run", "start:prod"]
