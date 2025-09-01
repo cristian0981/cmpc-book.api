@@ -20,6 +20,7 @@ import { EditorialsService } from './editorials.service';
 import { CreateEditorialDto } from './dto/create-editorial.dto';
 import { UpdateEditorialDto } from './dto/update-editorial.dto';
 import { Editorial } from './models/editorial.model';
+import { Auth } from '../auth/decorators/auth.decorator';
 
 @ApiTags('Editoriales')
 @Controller('editorials')
@@ -27,6 +28,7 @@ export class EditorialsController {
   constructor(private readonly editorialsService: EditorialsService) {}
 
   @Post()
+  @Auth()
   @ApiOperation({ summary: 'Crear una nueva editorial' })
   @ApiBody({ type: CreateEditorialDto })
   @ApiResponse({
@@ -47,6 +49,7 @@ export class EditorialsController {
   }
 
   @Get()
+  @Auth()
   @ApiOperation({ summary: 'Obtener todas las editoriales' })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -58,6 +61,7 @@ export class EditorialsController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Obtener una editorial por ID' })
   @ApiParam({
     name: 'id',
@@ -84,6 +88,7 @@ export class EditorialsController {
   }
 
   @Patch(':id')
+  @Auth()
   @ApiOperation({ summary: 'Actualizar una editorial' })
   @ApiParam({
     name: 'id',
@@ -118,6 +123,7 @@ export class EditorialsController {
   }
 
   @Delete(':id')
+  @Auth()
   @ApiOperation({ summary: 'Eliminar una editorial' })
   @ApiParam({
     name: 'id',

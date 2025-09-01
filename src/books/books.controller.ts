@@ -96,6 +96,7 @@ user: AuthModel,
   }
 
   @Get()
+  @Auth()
   @ApiOperation({ summary: 'Obtener lista de libros con filtros y paginación' })
   @ApiQuery({
     name: 'page',
@@ -203,6 +204,7 @@ user: AuthModel,
   }
 
   @Get('available')
+  @Auth()
   @ApiOperation({ summary: 'Obtener libros disponibles (con stock)' })
   @ApiResponse({
     status: 200,
@@ -214,6 +216,7 @@ user: AuthModel,
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Obtener un libro por ID' })
   @ApiParam({
     name: 'id',

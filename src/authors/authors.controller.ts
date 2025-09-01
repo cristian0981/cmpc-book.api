@@ -48,6 +48,7 @@ export class AuthorsController {
   }
 
   @Get()
+  @Auth()
   @ApiOperation({ summary: 'Obtener todos los autores' })
   @ApiResponse({
     status: 200,
@@ -59,6 +60,7 @@ export class AuthorsController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Obtener un autor por ID' })
   @ApiParam({
     name: 'id',
@@ -83,6 +85,7 @@ export class AuthorsController {
   }
 
   @Patch(':id')
+  @Auth()
   @ApiOperation({ summary: 'Actualizar un autor' })
   @ApiParam({
     name: 'id',
@@ -115,6 +118,7 @@ export class AuthorsController {
   }
 
   @Delete(':id')
+  @Auth()
   @ApiOperation({ summary: 'Eliminar un autor (soft delete)' })
   @ApiParam({
     name: 'id',
