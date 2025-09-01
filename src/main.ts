@@ -16,8 +16,10 @@ async function bootstrap() {
   
   // Configurar CORS
   app.enableCors({
-    origin: ['http://localhost:5173'],
-    credentials: true,
+    origin: ['http://localhost:5173', 'https://mpcbook-front-production.up.railway.app'],
+     credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
 
   });
   
