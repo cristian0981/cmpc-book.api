@@ -51,6 +51,7 @@ export class GenresController {
   }
 
   @Get()
+  @Auth()
   @ApiOperation({ summary: 'Obtener todos los géneros' })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -62,6 +63,7 @@ export class GenresController {
   }
 
   @Get(':id')
+  @Auth()
   @ApiOperation({ summary: 'Obtener un género por ID' })
   @ApiParam({
     name: 'id',
@@ -88,6 +90,7 @@ export class GenresController {
   }
 
   @Patch(':id')
+  @Auth()
   @ApiOperation({ summary: 'Actualizar un género' })
   @ApiParam({
     name: 'id',
@@ -118,6 +121,7 @@ export class GenresController {
   }
 
   @Delete(':id')
+  @Auth()
   @ApiOperation({ summary: 'Eliminar un género' })
   @ApiParam({
     name: 'id',
