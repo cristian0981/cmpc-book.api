@@ -2,27 +2,46 @@
 
 API RESTful para el sistema de librería CMPC con NestJS, PostgreSQL y autenticación JWT.
 
-## 🚀 Despliegue Local
+## 📋 Requisitos Previos
 
-### Requisitos
 - Node.js v18+
-- PostgreSQL v12+
+- PostgreSQL v12+ (o Docker)
 - npm v8+
+- Git
 
-### Configuración
+## 🚀 Instalación y Configuración
 
-1. **Instalar dependencias:**
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/cristian0981/cmpc-book.api.git
+cd cmpc-book.api
+```
+
+### 2. Instalar Dependencias
+
 ```bash
 npm install --legacy-peer-deps
 ```
 
-2. **Configurar PostgreSQL:**
+### 3. Configuración de Base de Datos
+
+####  Base de Datos con Docker (Recomendado para desarrollo)
+
 ```bash
-# Con Docker
-docker run --name bookstore_db -e POSTGRES_PASSWORD=password -e POSTGRES_DB=cmpc_bookstore -p 5436:5432 -d postgres:17.6
+# Levantar solo la base de datos
+npm run db:up
+
+# Para detener la base de datos
+npm run db:down
 ```
 
-3. **Crear archivo `.env`:**
+
+
+### 4. Configurar Variables de Entorno
+
+Crear archivo `.env` en la raíz del proyecto:
+
 ```env
 PORT=5000
 NODE_ENV=development
@@ -41,27 +60,24 @@ CORS_ORIGIN=http://localhost:3000
 PORT_DB=5436
 ```
 
-4. **Crear directorios:**
-```bash
-mkdir uploads\
-mkdir static\
-```
+### 6. Ejecutar la Aplicación
 
-5. **Ejecutar aplicación:**
 ```bash
 # Desarrollo
 npm run start:dev
+
 
 # Producción
 npm run build
 npm run start:prod
 ```
 
-6. **Verificar:**
-- API: http://localhost:5000
-- Swagger: http://localhost:5000/api/docs
+### 7. Verificar Instalación
 
-## 🐳 Despliegue con Docker
+- **API:** http://localhost:5000
+- **Documentación Swagger:** http://localhost:5000/api/docs
+
+## 🐳 Despliegue con Docker Completo
 
 ### Requisitos
 - Docker v20.10+
@@ -73,65 +89,100 @@ npm run start:prod
 
 2. **Ejecutar contenedores:**
 ```bash
-docker-compose up --build -d
+npm run dev:full
 ```
 
-3. **Comandos útiles:**
-```bash
-# Ver logs
-docker-compose logs -f
-
-# Verificar estado
-docker-compose ps
-
-# Detener
-docker-compose down
-
-# Probar API
-curl http://localhost:5000/api/books
 ```
 
-## 🔧 Testing
+## 🔧 Scripts Disponibles
 
 ```bash
-# Tests unitarios
-npm run test
+# Desarrollo
+npm run start:dev          # Iniciar en modo desarrollo
+npm run start:debug        # Iniciar con debugger
 
-# Cobertura
-npm run test:cov
 
+```
 
 ## 📚 Características
 
-- ✅ CRUD completo (libros, autores, géneros, editoriales)
-- ✅ Autenticación JWT con refresh tokens
-- ✅ Exportación CSV con paginación
-- ✅ Filtrado, búsqueda y ordenamiento
-- ✅ Subida de imágenes
-- ✅ Soft delete
-- ✅ Documentación Swagger
-- ✅ Testing unitario (80%+ cobertura)
-- ✅ Validación con DTOs
-- ✅ Manejo de errores centralizado
+- ✅ **CRUD Completo:** Libros, autores, géneros, editoriales
+- ✅ **Autenticación JWT:** Con refresh tokens y roles
+- ✅ **Exportación CSV:** Con paginación optimizada
+- ✅ **Filtrado Avanzado:** Búsqueda, ordenamiento y paginación
+- ✅ **Subida de Archivos:** Imágenes con validación
+- ✅ **Soft Delete:** Eliminación lógica de registros
+- ✅ **Documentación Swagger:** API completamente documentada
+- ✅ **Testing Completo:** Unitarios e integración (80%+ cobertura)
+- ✅ **Validación DTOs:** Validación robusta de datos
+- ✅ **Manejo de Errores:** Sistema centralizado de errores
+- ✅ **Guards y Decoradores:** Seguridad por roles
+- ✅ **Interceptores:** Transformación de respuestas
 
-## 🛠️ Troubleshooting
+## 🔐 Autenticación
 
-**Docker:**
+### Endpoints de Autenticación
+
+- `POST /auth/register` - Registro de usuarios
+- `POST /auth/login` - Inicio de sesión
+- `POST /auth/logout` - Cerrar sesión
+
+
+## 📊 API Endpoints
+
+### Libros
+- `GET /api/books` - Listar libros (con filtros)
+- `GET /api/books/:id` - Obtener libro por ID
+- `POST /api/books` - Crear libro
+- `PATCH /api/books/:id` - Actualizar libro
+- `DELETE /api/books/:id` - Eliminar libro
+- `GET /api/books/export/csv` - Exportar a CSV
+- `GET /api/books/available` - Libros disponibles
+
+### Autores
+- `GET /api/authors` - Listar autores
+- `GET /api/authors/:id` - Obtener autor por ID
+- `POST /api/authors` - Crear autor
+- `PATCH /api/authors/:id` - Actualizar autor
+- `DELETE /api/authors/:id` - Eliminar autor
+
+### Géneros
+- `GET /api/genres` - Listar géneros
+- `GET /api/genres/:id` - Obtener género por ID
+- `POST /api/genres` - Crear género
+- `PATCH /api/genres/:id` - Actualizar género
+- `DELETE /api/genres/:id` - Eliminar género
+
+### Editoriales
+- `GET /api/editorials` - Listar editoriales
+- `GET /api/editorials/:id` - Obtener editorial por ID
+- `POST /api/editorials` - Crear editorial
+- `PATCH /api/editorials/:id` - Actualizar editorial
+- `DELETE /api/editorials/:id` - Eliminar editorial
+
+### Archivos
+- `POST /api/files/upload` - Subir archivo
+- `GET /files/:filename` - Obtener archivo
+
+## 🧪 Testing
+
 ```bash
-# Limpiar y reiniciar
-docker-compose down -v
-docker system prune -f
-docker-compose up --build -d
+# Ejecutar todos los tests
+npm run test
 
-# Verificar conectividad
-docker-compose exec api ping db
+# Tests con cobertura
+npm run test:cov
+
 ```
 
-**Local:**
+
+#### Aplicación Local
 - Verificar que PostgreSQL esté ejecutándose
 - Revisar variables de entorno en `.env`
-- Comprobar puertos disponibles
+- Comprobar que los puertos no estén ocupados
+- Verificar permisos de directorios `uploads` y `static`
 
-## 📄 Documentación API
-
-Swagger disponible en: **http://localhost:5000/api/docs**
+#### Errores de Autenticación
+- Verificar que `JWT_SECRET` esté configurado
+- Comprobar que las cookies estén habilitadas
+- Revisar configuración de CORS
