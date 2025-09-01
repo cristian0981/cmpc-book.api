@@ -77,6 +77,7 @@ describe('BooksController', () => {
         title: mockBook.title,
         authorId: mockBook.authorId,
         editorialId: mockBook.editorialId,
+        availability: mockBook.availability,
         genreId: mockBook.genreId,
         price: 25.99,
         stock: 10,

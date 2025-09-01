@@ -119,7 +119,7 @@ describe('FilesController', () => {
 
       // Assert
       expect(result).toEqual({
-        secureUrl: `${process.env.HOST_API || 'http://localhost:3000'}/uploads/books/${mockFile.filename}`
+        secureUrl: `${process.env.HOST_API || 'http://localhost:3000'}/files/books/${mockFile.filename}`
       });
     });
 
