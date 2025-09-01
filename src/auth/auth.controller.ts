@@ -23,6 +23,8 @@ import {
   MessageResponseDto
 } from './dto/auth-response.dto';
 import { CookiesService } from '../common/services/cookie.service';
+import { Auth } from './decorators/auth.decorator';
+
 
 @ApiTags('Autenticación')
 @Controller('auth')

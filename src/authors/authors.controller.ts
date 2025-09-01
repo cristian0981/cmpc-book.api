@@ -19,6 +19,7 @@ import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { Author } from './models/author.model';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @ApiTags('authors')
 @Controller('authors')
@@ -26,6 +27,7 @@ export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Post()
+  @Auth()
   @ApiOperation({ summary: 'Crear un nuevo autor' })
   @ApiBody({ type: CreateAuthorDto })
   @ApiResponse({
